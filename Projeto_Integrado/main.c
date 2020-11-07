@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include "login_info.c"
 
-int main()
-{
-    printf("Hello world!\n");
-    return 0;
+int main(){
+
+  init();
+
 }
