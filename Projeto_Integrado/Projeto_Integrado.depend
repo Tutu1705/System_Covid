@@ -1,8 +1,17 @@
 # depslib dependency file v1.0
-1604789791 source:/home/k4nek1/git/System_Covid/Projeto_Integrado/login_info.c
+1605049018 source:/home/k4nek1/git/System_Covid/Projeto_Integrado/login_info.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
 
-1604788169 source:/home/k4nek1/git/System_Covid/Projeto_Integrado/main.c
+1604804414 source:/home/k4nek1/git/System_Covid/Projeto_Integrado/main.c
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
+	"login_info.c"
+
+1604843983 /home/k4nek1/git/System_Covid/Projeto_Integrado/login_info.c
+	<stdio.h>
+	<string.h>
+	<stdlib.h>
 
