@@ -220,20 +220,20 @@ void cadastro(){
         fgets(cad_paciente[i].tp_end.estado,"%s ",stdin);
 
         //      DADOS DE SAÚDE
-        printf("\nDia do Diagnóstico: ");
+        printf("\nDia do Diagnostico: ");
         fgets(&cad_paciente[i].tp_saude.tp_diag_d.dia,"%s ",stdin);
 
-        printf("\nMes do Diagnóstico: ");
+        printf("\nMes do Diagnostico: ");
         fgets(&cad_paciente[i].tp_saude.tp_diag_d.mes,"%s ",stdin);
 
-        printf("\nAno do Diagnóstico: ");
+        printf("\nAno do Diagnostico: ");
         fgets(&cad_paciente[i].tp_saude.tp_diag_d.ano,"%s ",stdin);
 
         cadmorb:
-        printf("\nPaciente possui alguma morbidade? [S/N] ");
+        printf("\nPaciente possui alguma comorbidade? [S/N] ");
         fgets(&cad_paciente[i].tp_saude.opt_morb,"%s ",stdin);
         if(cad_paciente[i].tp_saude.opt_morb == 'S'|| cad_paciente[i].tp_saude.opt_morb == 's'){
-            printf("\nInforme a morbidade: ");
+            printf("\nInforme a comorbidade: ");
             fgets(&cad_paciente[i].tp_saude.morb,"%s ",stdin);
         }else if(cad_paciente[i].tp_saude.opt_morb == 'N'||cad_paciente[i].tp_saude.opt_morb == 'n'){
             goto result_cad;
@@ -243,12 +243,13 @@ void cadastro(){
         }
 
         result_cad:
-        printf("\nPaciente cadastrado com sucesso.");
+        printf("\nPaciente cadastrado com sucesso ");
 
 
         //      CALCULO DE IDADE
         idade = atual - *p;
         if(idade>65){
+            printf("e esta no grupo de risco. Dados do paciente encaminhados.");
             if(cad_paciente[i].tp_saude.opt_morb == 'S' || cad_paciente[i].tp_saude.opt_morb == 's'){
                 p_morb = 1;
                 gp_risco = 1;
@@ -258,7 +259,7 @@ void cadastro(){
                 goto validate;
             }
         }else{
-            printf("\nPaciente esta fora do grupo de risco.");
+            printf("e esta fora do grupo de risco.");
         }
 
         //      VALIDAÇÃO DE IDADE E SE HÁ COMORBIDADE
@@ -279,7 +280,7 @@ void cadastro(){
     }
 
     fwrite(&cad_paciente,sizeof(persStruct),1,cadpac);
-    system("cls");
+    //system("cls");
 
     repeat_cadp:
     printf("\n\nDeseja cadastrar outro paciente? [S/N]  ");
