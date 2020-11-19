@@ -94,6 +94,7 @@ int access(){
     fclose(logincred);
     if(nm == 1 && sn == 1){
         printf("\nAcesso realizado com sucesso! \n");
+
         system("cls");
         menup();
     }else if(nm == 0){
@@ -249,7 +250,7 @@ void cadastro(){
         //      CALCULO DE IDADE
         idade = atual - *p;
         if(idade>65){
-            printf("e esta no grupo de risco. Dados do paciente encaminhados.");
+            printf("e esta no grupo de risco. Dados do paciente encaminhados ao arquivo 'grupo_risco.txt'.");
             if(cad_paciente[i].tp_saude.opt_morb == 'S' || cad_paciente[i].tp_saude.opt_morb == 's'){
                 p_morb = 1;
                 gp_risco = 1;
@@ -285,6 +286,7 @@ void cadastro(){
     repeat_cadp:
     printf("\n\nDeseja cadastrar outro paciente? [S/N]  ");
     scanf("%s",&opt_cad);
+    getchar();
     if(opt_cad == 'S' || opt_cad == 's'){
         system("cls");
         goto cadp;
