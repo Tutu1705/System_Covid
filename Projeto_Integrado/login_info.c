@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
-#include <ctype.h>
+//#include <math.h>
+//#include <ctype.h>
 
 
 //      INÍCIO DO PROGRAMA
@@ -16,35 +16,16 @@ int init(){
     if(opt==1){
         //system("cls");
         crtuser();
+        fflush(stdin);
     } else if(opt==2){
        // system("cls");
         access();
+        fflush(stdin);
     } else {
         printf("Opção incorreta. \n Tente novamente.");
         return init();
     }
     return 0;
-}
-
-
-
-//      CRIACAO DOS ARQUIVOS NECESSÁRIOS
-int crtfile(){
-
-    FILE *logincred;
-    logincred = fopen("/home/k4nek1/Desktop/login.txt","a");
-    if(logincred==NULL){
-        printf("Erro ao criar o arquivo 'LOGIN'.\n");
-        return EXIT_FAILURE;
-    }
-    fclose(logincred);
-
-    FILE *cadpac;
-    cadpac = fopen("/home/k4nek1/Desktop/cadastro.txt","a");
-    if(cadpac==NULL){
-        printf("Erro ao criar o arquivo - 'PACIENTES'.");
-        return EXIT_FAILURE;
-    }
 }
 
 
@@ -75,8 +56,9 @@ int crtuser(){
         printf("Senha não segue os critérios, tente novamente.");
         goto check_pass;
     }
-    fprintf(logincred,"%s ",id);
+    fprintf(logincred,"%s ", id);
     fprintf(logincred, "%s \n", senha);
+    system("cls");
     fclose(logincred);
 }
 
@@ -91,6 +73,7 @@ int access(){
     int nm=0;
     printf("\nDigite seu usuário:\n");
     scanf("%s",&nome);
+    fflush(stdin);
     while(fscanf(logincred,"%s",id)!= EOF){
         if(strcmp(nome,id)==0){
             nm = 1;
@@ -102,6 +85,7 @@ int access(){
     int sn=0;
     printf("\nDigite sua senha: \n");
     scanf("%s",&senha);
+    fflush(stdin);
     while(fscanf(logincred,"%s",pw)!= EOF){
         if(strcmp(pw,senha)==0){
             sn = 1;
@@ -111,15 +95,15 @@ int access(){
 
     fclose(logincred);
     if(nm == 1 && sn == 1){
-        printf("Acesso realizado com sucesso! \n");
+        printf("\nAcesso realizado com sucesso! \n");
         //system("cls");
         menup();
     }else if(nm == 0){
         printf("Login não cadastrado. Tente novamente.\n");
         goto log;
     }else if(sn == 0){
-        printf("Senha incorreta.");
-        goto pwd;
+        printf("Senha incorreta.\n");
+        goto log;
     }
 }
 
@@ -128,148 +112,228 @@ int access(){
 struct endStruct{
     char rua[50];
     char bairro[40];
-    char numero;
-    char cep[9];
+    char numero[4];
+    char cep[10];
     char cidade[20];
     char estado[20];
 };
 
 struct dnStruct{
-    int dia;
-    int mes;
-    int ano;
+    char dia[3];
+    char mes[3];
+    //char ano[5];
+    int ano[5];
 };
 
 struct ddStruct{
-    int dia;
-    int mes;
-    int ano;
+    char dia[3];
+    char mes[3];
+    char ano[5];
 };
 
 struct sauStruct{
     char morb[20];
+    char opt_morb;
     struct ddStruct tp_diag_d;
 };
 
-struct persStruct{
-    char nome[30];
-    int cpf;
-    int tel;
+typedef struct {
+    char nome[40];
+    char cpf[12];
+    char tel[12];
     char mail[40];
     struct endStruct tp_end;
     struct dnStruct tp_d_nasc;
     struct sauStruct tp_saude;
-};
+}persStruct;
 
-struct persStruct cad_paciente[5];
+void cadastro(){
 
-
-int cadastro(){
-
-    int i;
-    char opt_morb, opt_cad;
-    char em[13] = {'@','o','u','t','l','o','o','k','.','c','o','m'};
+    int i, len, len1, idade, atual = 2020, gp_risco = 0, p_morb = 0, *p;
+    char opt_cad, t=0;
+    persStruct cad_paciente[5];
+    p = cad_paciente->tp_d_nasc.ano;
 
     FILE *cadpac;
-    cadpac = fopen("/home/k4nek1/Desktop/cadastro.txt","a");
+    cadpac = fopen("/home/k4nek1/Desktop/cadastro.dbc","ab");
     if(cadpac==NULL){
-        printf("Erro ao criar o arquivo - 'PACIENTES'.");
+        printf("Erro ao abrir o arquivo - 'PACIENTES'.");
         return EXIT_FAILURE;
     }
 
+    FILE *grupo_risco;
+    grupo_risco = fopen("/home/k4nek1/Desktop/grupo_risco.txt","a");
+    if(grupo_risco==NULL){
+        printf("Erro ao abrir o arquivo - GRUPO DE RISCO.");
+        return EXIT_FAILURE;
+    }
+
+    /*if(t==0){
+        fprintf(grupo_risco,"%s ","NOME ");
+        fprintf(grupo_risco,"%s ","IDADE ");
+        fprintf(grupo_risco,"%s ","CEP ");
+        fprintf(grupo_risco,"%s \n","COMORBIDADE ");
+        t = 1;
+    }*/
+
     cadp: ;
     for(i=0;i<1;i++){
-        printf("---------------------------------------------\n");
-        printf("Insira os dados do paciente: ");
+        printf("---------------------------------------------");
+        printf("\nInsira os dados do paciente: \n");
+        printf("---------------------------------------------");
         //      DADOS PESSOAIS
-        printf("\n\nNome: ");
-        scanf("%s",&cad_paciente[i].nome);
+        printf("\nNome: ");
+        fgets(&cad_paciente[i].nome,"%s",stdin);
+        len = strlen(cad_paciente[i].nome);
+        if(cad_paciente->nome[len-1]=='\n')
+            cad_paciente->nome[len-1]=0;
+
         printf("\nCPF: ");
-        scanf("%d",&cad_paciente[i].cpf);
+        fgets(&cad_paciente[i].cpf,"%s ",stdin);
+
         printf("\nTelefone: ");
-        scanf("%d",&cad_paciente[i].tel);
+        fgets(&cad_paciente[i].tel,"%s ",stdin);
+
         printf("\nEmail: ");
-        scanf("%s",&cad_paciente[i].mail);
+        fgets(&cad_paciente[i].mail,"%s ",stdin);
+
         printf("\nDia de Nascimento: ");
-        scanf("%d",&cad_paciente[i].tp_d_nasc.dia);
+        fgets(&cad_paciente[i].tp_d_nasc.dia,"%s ",stdin);
+
         printf("\nMes de Nascimento: ");
-        scanf("%d",&cad_paciente[i].tp_d_nasc.mes);
-        printf("\nAno de Nascimento: ");
+        fgets(&cad_paciente[i].tp_d_nasc.mes,"%s ",stdin);
+
+        printf("\nAno de Nascimento com 4 digitos: ");
+        //fgets(&cad_paciente[i].tp_d_nasc.ano,"%d",stdin);
         scanf("%d",&cad_paciente[i].tp_d_nasc.ano);
+        getchar();
 
         //      DADOS DE ENDEREÇO
         printf("\nRua: ");
-        scanf("%s",&cad_paciente[i].tp_end.rua);
+        fgets(cad_paciente[i].tp_end.rua,"%s ",stdin);
+
         printf("\nBairro: ");
-        scanf("%s",&cad_paciente[i].tp_end.bairro);
+        fgets(cad_paciente[i].tp_end.bairro,"%s ",stdin);
+
         printf("\nNumero: ");
-        scanf("%d",&cad_paciente[i].tp_end.numero);
+        fgets(&cad_paciente[i].tp_end.numero,"%s ",stdin);
+
         printf("\nCEP: ");
-        scanf("%d",&cad_paciente[i].tp_end.cep);
+        fgets(cad_paciente[i].tp_end.cep,"%s ",stdin);
+        len1 = strlen(cad_paciente[i].tp_end.cep);
+        if(cad_paciente->tp_end.cep[len1-1]=='\n')
+            cad_paciente->tp_end.cep[len1-1]=0;
+
         printf("\nCidade: ");
-        scanf("%s",&cad_paciente[i].tp_end.cidade);
+        fgets(cad_paciente[i].tp_end.cidade,"%s ",stdin);
+
         printf("\nEstado: ");
-        scanf("%s",&cad_paciente[i].tp_end.estado);
+        fgets(cad_paciente[i].tp_end.estado,"%s ",stdin);
 
         //      DADOS DE SAÚDE
         printf("\nDia do Diagnóstico: ");
-        scanf("%d",&cad_paciente[i].tp_saude.tp_diag_d.dia);
+        fgets(&cad_paciente[i].tp_saude.tp_diag_d.dia,"%s ",stdin);
+
         printf("\nMes do Diagnóstico: ");
-        scanf("%d",&cad_paciente[i].tp_saude.tp_diag_d.mes);
-        printf("\nAno: ");
-        scanf("%d",&cad_paciente[i].tp_saude.tp_diag_d.ano);
+        fgets(&cad_paciente[i].tp_saude.tp_diag_d.mes,"%s ",stdin);
+
+        printf("\nAno do Diagnóstico: ");
+        fgets(&cad_paciente[i].tp_saude.tp_diag_d.ano,"%s ",stdin);
 
         cadmorb:
-        printf("\nPaciente possui alguma morbidade? S|N");
-        scanf("%c",&opt_morb);
-        if(opt_morb == 'S'){
-            printf("Informe a morbidade: ");
-            scanf("%s",&cad_paciente[i].tp_saude.morb);
-        }else if(opt_morb == 'N'){
+        printf("\nPaciente possui alguma morbidade? [S/N] ");
+        fgets(&cad_paciente[i].tp_saude.opt_morb,"%s ",stdin);
+        if(cad_paciente[i].tp_saude.opt_morb == 'S'|| cad_paciente[i].tp_saude.opt_morb == 's'){
+            printf("\nInforme a morbidade: ");
+            fgets(&cad_paciente[i].tp_saude.morb,"%s ",stdin);
+        }else if(cad_paciente[i].tp_saude.opt_morb == 'N'||cad_paciente[i].tp_saude.opt_morb == 'n'){
             goto result_cad;
         }else{
-            printf("Opção inválida. Tente novamente.");
+            printf("\nOpção inválida. Tente novamente.");
             goto cadmorb;
         }
 
         result_cad:
-        printf("\nCadastro de paciente realizado com sucesso.");
-    }
+        printf("\Paciente cadastrado com sucesso.");
 
-        repeat_cadp:
-        printf("\nDeseja cadastrar outro paciente? S|N");
-        scanf("%c",&opt_cad);
-        if(opt_cad=='S'||opt_cad=='s'){
-            goto cadp;
-        }else if(opt_cad=='N'||opt_cad=='n'){
-            menup();
+        idade = atual - *p;
+        printf("A idade do paciente e: %d",idade);
+
+        if(idade>65){
+            if(cad_paciente[i].tp_saude.opt_morb == 'S' || cad_paciente[i].tp_saude.opt_morb == 's'){
+                //printf("\nPaciente %s possui morbidade.",cad_paciente[i].nome);
+                p_morb = 1;
+                gp_risco = 1;
+                goto validate;
+            }else{
+                //printf("\nPaciente %s nao possui morbidade.",cad_paciente[i].nome);
+                gp_risco = 1;
+                goto validate;
+            }
         }else{
-            printf("Opção inválida. Tente novamente.");
-            goto repeat_cadp;
+            printf("\nPaciente esta fora do grupo de risco.");
         }
 
+        validate:
+        if(gp_risco == 1 && p_morb == 1){
 
+            fprintf(grupo_risco,"%s ",cad_paciente->nome);
+            fprintf(grupo_risco,"%d ",idade);
+            fprintf(grupo_risco,"%s ",cad_paciente->tp_end.cep);
+            fprintf(grupo_risco,"%s",cad_paciente->tp_saude.morb);
+            //fwrite(idade,sizeof(int),1,grupo_risco);
+            //fwrite(&cad_paciente[i].tp_end.cep,sizeof(cad_paciente),1,grupo_risco);
 
+        }else if(gp_risco == 1 && p_morb == 0){
 
+            fprintf(grupo_risco,"%s ",cad_paciente->nome);
+            fprintf(grupo_risco,"%d ",idade);
+            fprintf(grupo_risco,"%s",cad_paciente->tp_end.cep);
+
+        }else{
+            goto repeat_cadp;
+        }
+        fclose(grupo_risco);
+
+    }
+
+    fwrite(&cad_paciente,sizeof(persStruct),1,cadpac);
+
+        //system("cls");
+
+    repeat_cadp:
+    printf("\n\nDeseja cadastrar outro paciente? [S/N]  ");
+    scanf("%s",&opt_cad);
+    if(opt_cad == 'S' || opt_cad == 's'){
+        //system("cls");
+        goto cadp;
+    }else if(opt_cad == 'N'||opt_cad == 'n'){
+        menup();
+    }else{
+        printf("\nOpção inválida. Tente novamente.");
+        goto repeat_cadp;
+    }
+    fclose(cadpac);
 
 }
 
-//      MENU OPÇÃO
-void menup(){
 
-    int opt;
+//      MENU PRINCIPAL
+int menup(){
+
+    char opt;
     int i;
 
     do{
-        printf("Selecione uma das opções: \n");
+        printf("\nSelecione uma das opcoes: \n");
         printf("---------------------------------------------\n");
         printf("| [1] - Cadastrar paciente.                 |\n");
         printf("| [2] - Sair do login atual.                |\n");
         printf("| [3] - Sair do programa.                   |\n");
         printf("---------------------------------------------");
         printf("\n");
-        fflush(stdin);
         scanf("%d",&opt);
+        getchar();
  //     system("cls");
         switch(opt){
             case 1:
@@ -292,8 +356,21 @@ void menup(){
 //      MAIN...
 int main(){
 
-    //init();
-    //access();
+    int grupo_risco;
+    persStruct cad_paciente[5];
+
+    init();
+    access();
     cadastro();
-    //cadastro();
+
+    /*FILE *cadpac;
+    cadpac = fopen("/home/k4nek1/Desktop/cadastro.dbc","rb");
+
+    while(fread(&cad_paciente,sizeof(persStruct),1,cadpac)){
+        printf("%s%s%s%s",cad_paciente->nome,cad_paciente->cpf,cad_paciente->tel,cad_paciente->mail);
+    }*/
+
+
+
 }
+
