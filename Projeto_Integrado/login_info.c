@@ -34,12 +34,12 @@ int crtuser(){
     int tam;
 
     FILE *logincred;
-    logincred = fopen("/home/k4nek1/Desktop/login.txt","a");
+    logincred = fopen("login.txt","a");
     if(logincred==NULL){
-        logincred = fopen("/home/k4nek1/Desktop/login.txt","w");
+        logincred = fopen("login.txt","a");
     }
     inicio :
-    printf("\nCrie seu login de usuário com seu primeiro nome: \n");
+    printf("\nCrie seu login de usuario com seu primeiro nome: \n");
     scanf("%s",&id);
     tam = strlen(id);
     if(tam > 20){
@@ -47,11 +47,11 @@ int crtuser(){
         goto inicio;
     }
     check_pass :
-    printf("\nCrie sua senha com 8 à 20 caracteres.\n");
+    printf("\nCrie sua senha com 8 a 20 caracteres.\n");
     scanf("%s",&senha);
     tam = strlen(senha);
     if(tam < 8 || tam > 20){
-        printf("Senha não segue os critérios, tente novamente.");
+        printf("Senha não segue os criterios, tente novamente.");
         goto check_pass;
     }
     fprintf(logincred,"%s ", id);
@@ -65,11 +65,11 @@ int access(){
     char nome[21], senha[21], id[21], pw[21];
 
     FILE *logincred;
-    logincred = fopen("/home/k4nek1/Desktop/login.txt","r");
+    logincred = fopen("login.txt","r");
 
     log: ;
     int nm=0;
-    printf("\nDigite seu usuário:\n");
+    printf("\nDigite seu usuario:\n");
     scanf("%s",&nome);
     fflush(stdin);
     while(fscanf(logincred,"%s",id)!= EOF){
@@ -97,7 +97,7 @@ int access(){
         system("cls");
         menup();
     }else if(nm == 0){
-        printf("Login não cadastrado. Tente novamente.\n");
+        printf("Login nao cadastrado. Tente novamente.\n");
         goto log;
     }else if(sn == 0){
         printf("Senha incorreta.\n");
@@ -248,7 +248,6 @@ void cadastro(){
 
         //      CALCULO DE IDADE
         idade = atual - *p;
-        printf("A idade do paciente e: %d",idade);
         if(idade>65){
             if(cad_paciente[i].tp_saude.opt_morb == 'S' || cad_paciente[i].tp_saude.opt_morb == 's'){
                 p_morb = 1;
@@ -289,6 +288,7 @@ void cadastro(){
         system("cls");
         goto cadp;
     }else if(opt_cad == 'N'||opt_cad == 'n'){
+        system("cls");
         menup();
     }else{
         printf("\nOpção inválida. Tente novamente.");
