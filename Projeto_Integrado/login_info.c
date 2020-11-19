@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <math.h>
-//#include <ctype.h>
 
 
 //      INÍCIO DO PROGRAMA
@@ -14,11 +12,11 @@ int init(){
     scanf("%d",&opt);
 
     if(opt==1){
-        //system("cls");
+        system("cls");
         crtuser();
         fflush(stdin);
     } else if(opt==2){
-       // system("cls");
+       system("cls");
         access();
         fflush(stdin);
     } else {
@@ -96,7 +94,7 @@ int access(){
     fclose(logincred);
     if(nm == 1 && sn == 1){
         printf("\nAcesso realizado com sucesso! \n");
-        //system("cls");
+        system("cls");
         menup();
     }else if(nm == 0){
         printf("Login não cadastrado. Tente novamente.\n");
@@ -121,8 +119,7 @@ struct endStruct{
 struct dnStruct{
     char dia[3];
     char mes[3];
-    //char ano[5];
-    int ano[5];
+    int ano[5]; // Apenas o ano está como int pois será necessário realizar o calc da idade.
 };
 
 struct ddStruct{
@@ -147,6 +144,7 @@ typedef struct {
     struct sauStruct tp_saude;
 }persStruct;
 
+
 void cadastro(){
 
     int i, len, len1, idade, atual = 2020, gp_risco = 0, p_morb = 0, *p;
@@ -155,26 +153,18 @@ void cadastro(){
     p = cad_paciente->tp_d_nasc.ano;
 
     FILE *cadpac;
-    cadpac = fopen("/home/k4nek1/Desktop/cadastro.dbc","ab");
+    cadpac = fopen("cadastro.dbc","ab");
     if(cadpac==NULL){
         printf("Erro ao abrir o arquivo - 'PACIENTES'.");
         return EXIT_FAILURE;
     }
 
     FILE *grupo_risco;
-    grupo_risco = fopen("/home/k4nek1/Desktop/grupo_risco.txt","a");
+    grupo_risco = fopen("grupo_risco.txt","a");
     if(grupo_risco==NULL){
         printf("Erro ao abrir o arquivo - GRUPO DE RISCO.");
         return EXIT_FAILURE;
     }
-
-    /*if(t==0){
-        fprintf(grupo_risco,"%s ","NOME ");
-        fprintf(grupo_risco,"%s ","IDADE ");
-        fprintf(grupo_risco,"%s ","CEP ");
-        fprintf(grupo_risco,"%s \n","COMORBIDADE ");
-        t = 1;
-    }*/
 
     cadp: ;
     for(i=0;i<1;i++){
@@ -204,7 +194,6 @@ void cadastro(){
         fgets(&cad_paciente[i].tp_d_nasc.mes,"%s ",stdin);
 
         printf("\nAno de Nascimento com 4 digitos: ");
-        //fgets(&cad_paciente[i].tp_d_nasc.ano,"%d",stdin);
         scanf("%d",&cad_paciente[i].tp_d_nasc.ano);
         getchar();
 
@@ -254,19 +243,18 @@ void cadastro(){
         }
 
         result_cad:
-        printf("\Paciente cadastrado com sucesso.");
+        printf("\nPaciente cadastrado com sucesso.");
 
+
+        //      CALCULO DE IDADE
         idade = atual - *p;
         printf("A idade do paciente e: %d",idade);
-
         if(idade>65){
             if(cad_paciente[i].tp_saude.opt_morb == 'S' || cad_paciente[i].tp_saude.opt_morb == 's'){
-                //printf("\nPaciente %s possui morbidade.",cad_paciente[i].nome);
                 p_morb = 1;
                 gp_risco = 1;
                 goto validate;
             }else{
-                //printf("\nPaciente %s nao possui morbidade.",cad_paciente[i].nome);
                 gp_risco = 1;
                 goto validate;
             }
@@ -274,38 +262,31 @@ void cadastro(){
             printf("\nPaciente esta fora do grupo de risco.");
         }
 
+        //      VALIDAÇÃO DE IDADE E SE HÁ COMORBIDADE
         validate:
         if(gp_risco == 1 && p_morb == 1){
-
             fprintf(grupo_risco,"%s ",cad_paciente->nome);
             fprintf(grupo_risco,"%d ",idade);
             fprintf(grupo_risco,"%s ",cad_paciente->tp_end.cep);
             fprintf(grupo_risco,"%s",cad_paciente->tp_saude.morb);
-            //fwrite(idade,sizeof(int),1,grupo_risco);
-            //fwrite(&cad_paciente[i].tp_end.cep,sizeof(cad_paciente),1,grupo_risco);
-
         }else if(gp_risco == 1 && p_morb == 0){
-
             fprintf(grupo_risco,"%s ",cad_paciente->nome);
             fprintf(grupo_risco,"%d ",idade);
             fprintf(grupo_risco,"%s",cad_paciente->tp_end.cep);
-
         }else{
             goto repeat_cadp;
         }
         fclose(grupo_risco);
-
     }
 
     fwrite(&cad_paciente,sizeof(persStruct),1,cadpac);
-
-        //system("cls");
+    system("cls");
 
     repeat_cadp:
     printf("\n\nDeseja cadastrar outro paciente? [S/N]  ");
     scanf("%s",&opt_cad);
     if(opt_cad == 'S' || opt_cad == 's'){
-        //system("cls");
+        system("cls");
         goto cadp;
     }else if(opt_cad == 'N'||opt_cad == 'n'){
         menup();
@@ -334,7 +315,7 @@ int menup(){
         printf("\n");
         scanf("%d",&opt);
         getchar();
- //     system("cls");
+        system("cls");
         switch(opt){
             case 1:
                 cadastro();
@@ -362,15 +343,6 @@ int main(){
     init();
     access();
     cadastro();
-
-    /*FILE *cadpac;
-    cadpac = fopen("/home/k4nek1/Desktop/cadastro.dbc","rb");
-
-    while(fread(&cad_paciente,sizeof(persStruct),1,cadpac)){
-        printf("%s%s%s%s",cad_paciente->nome,cad_paciente->cpf,cad_paciente->tel,cad_paciente->mail);
-    }*/
-
-
 
 }
 
