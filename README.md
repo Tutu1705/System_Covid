@@ -1,6 +1,7 @@
-i# System_Covid
+# System_Covid
 
-Sistema acadêmico para cadastro e consulta de pacientes.
+Academic project to register and consult of patients with covid_19.
 
-Linguagem utilizada: C.
-Compilador: GCC.
+IDE: Code::blocks
+Languange: C
+Compiler: gcc
